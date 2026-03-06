@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Objetivos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#F5F5F5;--surface:#fff;--ink:#0A0A0A;--ink2:#555;--ink3:#AAA;
+  --border:#E8E8E8;--green:#18A058;--orange:#F07020;--red:#DC2626;--radius:14px;
+}
+html{-webkit-font-smoothing:antialiased}
+body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;padding-bottom:90px}
+
+header{background:#fff;padding:52px 20px 0;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:50}
+.header-row{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:20px}
+.app-title{font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:1px;line-height:1}
+.app-date{font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink3);margin-top:3px}
+.add-btn{width:42px;height:42px;border-radius:50%;background:var(--ink);border:none;color:#fff;font-size:24px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .18s,background .18s;padding-bottom:1px;flex-shrink:0}
+.add-btn:active{transform:scale(.9)}
+.tabs{display:flex}
+.tab{flex:1;padding:10px 0 12px;background:none;border:none;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink3);cursor:pointer;position:relative;transition:color .15s}
+.tab.active{color:var(--ink)}
+.tab.active::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--ink);border-radius:2px 2px 0 0}
+
+main{max-width:520px;margin:0 auto;padding:0 16px}
+
+.nav-bar{display:flex;align-items:center;justify-content:space-between;padding:18px 0 14px}
+.nav-center{flex:1;text-align:center}
+.nav-label{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:1px;text-transform:uppercase}
+.week-pill{display:inline-block;background:var(--ink);color:#fff;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:2px 8px;border-radius:20px;margin-top:4px}
+.nav-arrow{width:34px;height:34px;border-radius:8px;background:none;border:1.5px solid var(--border);color:var(--ink2);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0}
+.nav-arrow:active{transform:scale(.9)}
+
+.days-strip{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;background:var(--surface);border-radius:12px;padding:10px 12px;margin-bottom:14px;border:1px solid var(--border)}
+.strip-day{text-align:center;display:flex;flex-direction:column;align-items:center;gap:3px}
+.strip-letter{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--ink3)}
+.strip-num{font-size:14px;font-weight:600;color:var(--ink2);width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:50%}
+.strip-num.today{background:var(--ink);color:#fff;font-weight:700}
+
+.goal-card{background:var(--surface);border-radius:var(--radius);padding:16px 16px 14px;margin-bottom:10px;border:1px solid var(--border);animation:fadeUp .25s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+.card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.card-left{display:flex;align-items:center;gap:10px;flex:1;min-width:0}
+.card-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0}
+.card-name{font-size:15px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card-meta{font-size:10px;font-weight:600;color:var(--ink3);margin-top:2px;letter-spacing:.5px;text-transform:uppercase}
+.card-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.card-pct{font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:.5px;line-height:1}
+.edit-btn{background:none;border:1.5px solid var(--border);border-radius:8px;color:var(--ink3);cursor:pointer;font-size:13px;width:30px;height:30px;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.edit-btn:hover{border-color:var(--ink);color:var(--ink)}
+
+.day-dots{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:10px}
+.dot-wrap{display:flex;flex-direction:column;align-items:center;gap:4px}
+.dot-lbl{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:.3px;text-transform:uppercase;color:var(--ink3)}
+.dot-lbl.t{color:var(--ink)}
+.dot-btn{width:32px;height:32px;border-radius:50%;border:2px solid var(--border);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;color:transparent;transition:all .16s cubic-bezier(.34,1.4,.64,1);-webkit-tap-highlight-color:transparent}
+.dot-btn:not(.done):not(.future):active{transform:scale(.85)}
+.dot-btn.today-dot{border-width:2.5px}
+.dot-btn.done{border-color:transparent;color:#fff;transform:scale(1.08)}
+.dot-btn.done:active{transform:scale(.95)}
+.dot-btn.future{opacity:.22;cursor:default;pointer-events:none}
+
+.prog-track{height:4px;background:var(--border);border-radius:4px;overflow:hidden}
+.prog-fill{height:100%;border-radius:4px;transition:width .45s cubic-bezier(.4,0,.2,1)}
+
+.empty{text-align:center;padding:60px 20px}
+.empty-icon{font-size:40px;margin-bottom:14px}
+.empty-title{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:1px;color:var(--ink2);margin-bottom:6px}
+.empty-sub{font-size:13px;color:var(--ink3);font-weight:500}
+
+.month-hero{background:var(--ink);color:#fff;border-radius:var(--radius);padding:28px 24px;margin-bottom:14px;text-align:center}
+.m-label{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;opacity:.5;margin-bottom:6px}
+.m-big{font-family:'Bebas Neue',sans-serif;font-size:88px;letter-spacing:-1px;line-height:1;margin-bottom:8px}
+.m-msg{font-size:13px;font-weight:500;opacity:.65}
+
+.month-card{background:var(--surface);border-radius:var(--radius);padding:16px 18px;margin-bottom:8px;border:1px solid var(--border);display:flex;align-items:center;gap:14px;animation:fadeUp .25s ease both}
+.m-circle{flex-shrink:0;position:relative;width:56px;height:56px}
+.m-circle svg{transform:rotate(-90deg)}
+.m-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:.5px}
+.m-body{flex:1;min-width:0}
+.m-name-row{display:flex;align-items:center;gap:7px;margin-bottom:3px}
+.m-name{font-size:14px;font-weight:700}
+.m-sub{font-size:11px;color:var(--ink3);font-weight:500;margin-bottom:8px}
+.m-bar{height:4px;background:var(--border);border-radius:4px;overflow:hidden}
+.m-fill{height:100%;border-radius:4px;transition:width .55s cubic-bezier(.4,0,.2,1)}
+
+/* ── WEEKLY BARS ── */
+.week-bars{display:flex;align-items:flex-end;gap:3px;height:32px;margin-top:10px;margin-bottom:2px}
+.wbar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px}
+.wbar-track{width:100%;flex:1;background:var(--border);border-radius:3px;overflow:hidden;display:flex;align-items:flex-end}
+.wbar-fill{width:100%;border-radius:3px;transition:height .5s cubic-bezier(.4,0,.2,1)}
+.wbar-lbl{font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;color:var(--ink3);letter-spacing:.3px}
+
+/* ── BEST MONTH ── */
+.best-month-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.12);border-radius:20px;padding:4px 12px;margin-top:10px;font-size:11px;font-weight:600;letter-spacing:.5px;text-transform:uppercase}
+.best-month-badge .star{font-size:12px}
+
+/* ── CELEBRATION ── */
+#celebrate{position:fixed;inset:0;z-index:200;pointer-events:none;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .3s}
+#celebrate.show{opacity:1}
+.celebrate-inner{background:var(--ink);color:#fff;border-radius:20px;padding:20px 32px;text-align:center;transform:scale(.8);transition:transform .35s cubic-bezier(.34,1.56,.64,1)}
+#celebrate.show .celebrate-inner{transform:scale(1)}
+.celebrate-emoji{font-size:40px;margin-bottom:6px}
+.celebrate-title{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:1px;margin-bottom:2px}
+.celebrate-sub{font-size:12px;font-weight:500;opacity:.65}
+
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .22s}
+.overlay.open{opacity:1;pointer-events:all}
+.modal{background:#fff;border-radius:22px 22px 0 0;width:100%;max-width:520px;max-height:90vh;overflow-y:auto;padding:8px 0 0;transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1)}
+.overlay.open .modal{transform:translateY(0)}
+.handle{width:36px;height:4px;background:var(--border);border-radius:4px;margin:0 auto 20px}
+.modal-inner{padding:0 20px 48px}
+.modal-title{font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:1px;margin-bottom:24px}
+.fgrp{margin-bottom:22px}
+.flbl{display:block;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink3);margin-bottom:10px}
+.emoji-grid{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.ebtn{width:42px;height:42px;border-radius:10px;border:2px solid transparent;background:var(--bg);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .14s}
+.ebtn:active{transform:scale(.85)}
+.ebtn.sel{border-color:var(--ink);background:#fff}
+.tinput{width:100%;padding:13px 14px;border:2px solid var(--border);border-radius:12px;font-size:15px;font-family:'Barlow',sans-serif;font-weight:500;background:var(--bg);color:var(--ink);outline:none;transition:border-color .15s}
+.tinput:focus{border-color:var(--ink);background:#fff}
+.tinput::placeholder{color:var(--ink3);font-weight:400}
+.range-row{display:flex;align-items:center;gap:12px}
+.rinput{flex:1;-webkit-appearance:none;height:4px;border-radius:4px;background:var(--border);outline:none}
+.rinput::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;background:var(--ink);cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.2)}
+.rval{font-family:'Bebas Neue',sans-serif;font-size:30px;min-width:30px;text-align:center;letter-spacing:1px}
+.color-row{display:flex;gap:10px;flex-wrap:wrap}
+.cdot{width:30px;height:30px;border-radius:50%;border:3px solid transparent;cursor:pointer;transition:all .14s;outline:none}
+.cdot.sel{border-color:var(--ink);transform:scale(1.14)}
+.cdot:active{transform:scale(.85)}
+.sbtn{width:100%;padding:16px;background:var(--ink);color:#fff;border:none;border-radius:14px;font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:background .18s,transform .15s;margin-top:6px}
+.sbtn:hover{background:var(--green)}
+.sbtn:active{transform:scale(.98)}
+.dbtn{width:100%;padding:13px;background:none;color:var(--red);border:2px solid var(--border);border-radius:14px;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;margin-top:8px;transition:all .15s}
+.dbtn:hover{background:#FEF0F0;border-color:var(--red)}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+</style>
+</head>
+<body>
+<header>
+  <div class="header-row">
+    <div>
+      <div class="app-title">Objetivos</div>
+      <div class="app-date" id="appDate">—</div>
+    </div>
+    <button class="add-btn" onclick="openModal()">+</button>
+  </div>
+  <div class="tabs">
+    <button class="tab active" id="tabW" onclick="switchView('week')">Semana</button>
+    <button class="tab" id="tabM" onclick="switchView('month')">Mes</button>
+  </div>
+</header>
+
+<main>
+  <div id="weekView">
+    <div class="nav-bar">
+      <button class="nav-arrow" onclick="navWeek(-1)">&#8249;</button>
+      <div class="nav-center">
+        <div class="nav-label" id="weekLbl">—</div>
+        <div id="weekBadge"></div>
+      </div>
+      <button class="nav-arrow" onclick="navWeek(1)">&#8250;</button>
+    </div>
+    <div class="days-strip" id="daysStrip"></div>
+    <div id="goalsList"></div>
+    <div class="empty" id="emptyW" style="display:none">
+      <div class="empty-icon">🎯</div>
+      <div class="empty-title">Sin objetivos</div>
+      <div class="empty-sub">Tocá + para agregar el primero</div>
+    </div>
+  </div>
+
+  <div id="monthView" style="display:none">
+    <div class="nav-bar">
+      <button class="nav-arrow" onclick="navMonth(-1)">&#8249;</button>
+      <div class="nav-center"><div class="nav-label" id="monthLbl">—</div></div>
+      <button class="nav-arrow" onclick="navMonth(1)">&#8250;</button>
+    </div>
+    <div class="month-hero" id="mHero"></div>
+    <div id="monthList"></div>
+  </div>
+</main>
+
+<div id="celebrate"><div class="celebrate-inner"><div class="celebrate-emoji">🔥</div><div class="celebrate-title">¡Día completo!</div><div class="celebrate-sub">Cumpliste todos los objetivos de hoy</div></div></div>
+
+<div class="overlay" id="overlay" onclick="bgClose(event)">
+  <div class="modal">
+    <div class="handle"></div>
+    <div class="modal-inner">
+      <div class="modal-title" id="mTitle">Nuevo objetivo</div>
+      <div class="fgrp">
+        <label class="flbl">Ícono</label>
+        <div class="emoji-grid" id="emojiGrid"></div>
+        <input class="tinput" id="customEmoji" placeholder="O escribí tu propio emoji…" maxlength="4" style="margin-top:6px">
+      </div>
+      <div class="fgrp">
+        <label class="flbl">Nombre</label>
+        <input class="tinput" id="nameInp" placeholder="ej. Salir a correr" maxlength="30">
+      </div>
+      <div class="fgrp">
+        <label class="flbl">Días por semana</label>
+        <div class="range-row">
+          <span style="font-size:12px;color:var(--ink3);font-weight:600">1</span>
+          <input class="rinput" type="range" id="targetR" min="1" max="7" value="5" oninput="document.getElementById('targetV').textContent=this.value">
+          <span style="font-size:12px;color:var(--ink3);font-weight:600">7</span>
+          <span class="rval" id="targetV">5</span>
+        </div>
+      </div>
+      <div class="fgrp">
+        <label class="flbl">Color</label>
+        <div class="color-row" id="colorRow"></div>
+      </div>
+      <button class="sbtn" onclick="saveGoal()">Guardar</button>
+      <button class="dbtn" id="delBtn" style="display:none" onclick="deleteGoal()">Eliminar objetivo</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const EMOJIS=['🏃','🏋️','🧘','💧','📚','✍️','🥗','😴','🎸','🎨','💊','🧹','💰','🤝','🌿','🧠','🏊','🚴','🎯','🪴','☕','🍎','🌞','🫶'];
+const COLORS=['#111111','#18A058','#E63946','#2563EB','#F07020','#9333EA','#0891B2','#DC2626','#CA8A04','#0F766E'];
+const MONTHS=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+const DS=['L','M','X','J','V','S','D'];
+let goals=[],completions={},wOff=0,mOff=0,view='week';
+let editId=null,selEmoji='🏃',selColor=COLORS[0];
+
+function load(){try{const d=JSON.parse(localStorage.getItem('obj_v4')||'{}');goals=d.goals||[];completions=d.completions||{};}catch(e){}}
+function persist(){localStorage.setItem('obj_v4',JSON.stringify({goals,completions}));}
+function today(){return fmt(new Date());}
+function fmt(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
+function weekDates(off){
+  const now=new Date(),dow=(now.getDay()+6)%7,mon=new Date(now);
+  mon.setDate(now.getDate()-dow+off*7);mon.setHours(0,0,0,0);
+  return Array.from({length:7},(_,i)=>{const d=new Date(mon);d.setDate(mon.getDate()+i);return fmt(d);});
+}
+function monthDates(off){
+  const now=new Date(),t=new Date(now.getFullYear(),now.getMonth()+off,1);
+  const days=new Date(t.getFullYear(),t.getMonth()+1,0).getDate();
+  return Array.from({length:days},(_,i)=>fmt(new Date(t.getFullYear(),t.getMonth(),i+1)));
+}
+function pClr(p){return p>=80?'#18A058':p>=50?'#F07020':'#DC2626';}
+
+function renderWeek(){
+  const td=today(),dates=weekDates(wOff);
+  const s=new Date(dates[0]),e=new Date(dates[6]),o={day:'numeric',month:'short'};
+  document.getElementById('weekLbl').textContent=`${s.toLocaleDateString('es',o)} — ${e.toLocaleDateString('es',{...o,year:'numeric'})}`;
+  document.getElementById('weekBadge').innerHTML=wOff===0?'<div class="week-pill">Esta semana</div>':'';
+
+  const strip=document.getElementById('daysStrip');
+  strip.innerHTML='';
+  dates.forEach((d,i)=>{
+    const isT=d===td,dn=new Date(d).getDate();
+    const el=document.createElement('div');el.className='strip-day';
+    el.innerHTML=`<span class="strip-letter">${DS[i]}</span><span class="strip-num ${isT?'today':''}">${dn}</span>`;
+    strip.appendChild(el);
+  });
+
+  const list=document.getElementById('goalsList');
+  list.innerHTML='';
+  document.getElementById('emptyW').style.display=goals.length?'none':'block';
+
+  goals.forEach((g,gi)=>{
+    const doneC=dates.filter(d=>completions[d]?.[g.id]).length;
+    const pct=Math.round(Math.min((doneC/g.target)*100,100));
+    const card=document.createElement('div');
+    card.className='goal-card';card.style.animationDelay=gi*30+'ms';
+    card.innerHTML=`
+      <div class="card-top">
+        <div class="card-left">
+          <div class="card-icon" style="background:${g.color}18">${g.icon}</div>
+          <div>
+            <div class="card-name">${g.name}</div>
+            <div class="card-meta">${doneC} de ${g.target} días</div>
+          </div>
+        </div>
+        <div class="card-right">
+          <div class="card-pct" style="color:${pClr(pct)}">${pct}%</div>
+          <button class="edit-btn" onclick="openEdit('${g.id}')">✎</button>
+        </div>
+      </div>
+      <div class="day-dots" id="dots-${g.id}"></div>
+      <div class="prog-track"><div class="prog-fill" style="width:${pct}%;background:${g.color}"></div></div>`;
+    list.appendChild(card);
+
+    const dotsEl=document.getElementById('dots-'+g.id);
+    dates.forEach((dateStr,di)=>{
+      const done=!!completions[dateStr]?.[g.id],future=dateStr>td,isT=dateStr===td;
+      const wrap=document.createElement('div');wrap.className='dot-wrap';
+      const lbl=document.createElement('span');lbl.className='dot-lbl'+(isT?' t':'');lbl.textContent=DS[di];
+      const btn=document.createElement('button');
+      btn.className=`dot-btn${done?' done':''}${future?' future':''}${isT?' today-dot':''}`;
+      btn.style.background=done?g.color:'';
+      btn.style.borderColor=done?g.color:(isT?g.color:'');
+      btn.innerHTML=done?'✓':'';
+      if(!future)btn.onclick=()=>toggle(dateStr,g.id);
+      wrap.appendChild(lbl);wrap.appendChild(btn);dotsEl.appendChild(wrap);
+    });
+  });
+}
+
+function toggle(dateStr,goalId){
+  if(!completions[dateStr])completions[dateStr]={};
+  const nowDone=!completions[dateStr][goalId];
+  completions[dateStr][goalId]=nowDone;
+  if(nowDone&&navigator.vibrate)navigator.vibrate(30);
+  persist();renderWeek();
+  // Check if ALL goals done today
+  if(nowDone&&dateStr===today()){
+    const allDone=goals.length>0&&goals.every(g=>completions[dateStr]?.[g.id]);
+    if(allDone)showCelebration();
+  }
+}
+
+function showCelebration(){
+  const el=document.getElementById('celebrate');
+  el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),2200);
+}
+
+function getBestMonth(){
+  // Find the month key with highest avg pct across all completions
+  const monthMap={};
+  Object.keys(completions).forEach(dateStr=>{
+    const mk=dateStr.slice(0,7);
+    if(!monthMap[mk])monthMap[mk]=[];
+    monthMap[mk].push(dateStr);
+  });
+  let bestMk=null,bestAvg=0;
+  Object.entries(monthMap).forEach(([mk,dates])=>{
+    if(!goals.length)return;
+    const [y,m]=mk.split('-').map(Number);
+    const tgt=goals[0].target*4; // use first goal as proxy, or avg
+    const avgs=goals.map(g=>{
+      const done=dates.filter(d=>completions[d]?.[g.id]).length;
+      return Math.round(Math.min((done/(g.target*4))*100,100));
+    });
+    const avg=Math.round(avgs.reduce((a,b)=>a+b,0)/avgs.length);
+    if(avg>bestAvg){bestAvg=avg;bestMk=mk;}
+  });
+  return bestMk?{mk:bestMk,avg:bestAvg}:null;
+}
+
+function getWeeklyBars(goalId,off){
+  // 4 weeks of the month
+  const now=new Date(),t=new Date(now.getFullYear(),now.getMonth()+off,1);
+  const y=t.getFullYear(),m=t.getMonth();
+  return Array.from({length:4},(_,wi)=>{
+    const weekDays=Array.from({length:7},(__,di)=>{
+      const d=new Date(y,m,wi*7+di+1);
+      return d.getMonth()===m?fmt(d):null;
+    }).filter(Boolean);
+    const done=weekDays.filter(d=>completions[d]?.[goalId]).length;
+    return{done,total:weekDays.length,pct:weekDays.length?Math.round((done/weekDays.length)*100):0};
+  });
+}
+
+function renderMonth(){
+  const now=new Date(),t=new Date(now.getFullYear(),now.getMonth()+mOff,1);
+  document.getElementById('monthLbl').textContent=`${MONTHS[t.getMonth()]} ${t.getFullYear()}`;
+  const md=monthDates(mOff);
+  const stats=goals.map(g=>{
+    const done=md.filter(d=>completions[d]?.[g.id]).length;
+    const tgt=g.target*4;
+    const pct=Math.round(Math.min((done/tgt)*100,100));
+    return{...g,done,tgt,pct};
+  });
+  const avg=stats.length?Math.round(stats.reduce((a,b)=>a+b.pct,0)/stats.length):0;
+  const msg=avg>=80?'Excelente mes. Seguí así.':avg>=50?'Buen progreso, podés dar más.':'Mes difícil. El próximo va a ser mejor.';
+  
+  const best=getBestMonth();
+  const currentMk=`${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,'0')}`;
+  const isBest=best&&best.mk===currentMk&&best.avg>0;
+  const bestHtml=isBest?`<div class="best-month-badge"><span class="star">★</span> Mejor mes — ${best.avg}%</div>`:
+    best&&best.mk!==currentMk?`<div class="best-month-badge"><span class="star">★</span> Mejor mes: ${MONTHS[parseInt(best.mk.split('-')[1])-1]} ${best.avg}%</div>`:'';
+
+  document.getElementById('mHero').innerHTML=`<div class="m-label">Promedio mensual</div><div class="m-big">${avg}%</div><div class="m-msg">${msg}</div>${bestHtml}`;
+  const list=document.getElementById('monthList');list.innerHTML='';
+  if(!stats.length){list.innerHTML='<div class="empty"><div class="empty-icon">🎯</div><div class="empty-title">Sin objetivos</div></div>';return;}
+  stats.forEach((s,i)=>{
+    const clr=pClr(s.pct),r=22,circ=2*Math.PI*r,dash=(s.pct/100)*circ;
+    const weekBars=getWeeklyBars(s.id,mOff);
+    const barsHtml=weekBars.map((w,wi)=>`
+      <div class="wbar-wrap">
+        <div class="wbar-track" style="height:28px">
+          <div class="wbar-fill" style="height:${w.pct}%;background:${clr};opacity:.75"></div>
+        </div>
+        <span class="wbar-lbl">S${wi+1}</span>
+      </div>`).join('');
+    const c=document.createElement('div');c.className='month-card';c.style.animationDelay=i*35+'ms';
+    c.innerHTML=`
+      <div class="m-circle">
+        <svg width="56" height="56" viewBox="0 0 56 56">
+          <circle cx="28" cy="28" r="${r}" fill="none" stroke="#F0F0F0" stroke-width="5"/>
+          <circle cx="28" cy="28" r="${r}" fill="none" stroke="${clr}" stroke-width="5" stroke-dasharray="${dash} ${circ}" stroke-linecap="round"/>
+        </svg>
+        <div class="m-num" style="color:${clr}">${s.pct}%</div>
+      </div>
+      <div class="m-body">
+        <div class="m-name-row"><span style="font-size:18px">${s.icon}</span><span class="m-name">${s.name}</span></div>
+        <div class="m-sub">${s.done} de ${s.tgt} días objetivo</div>
+        <div class="m-bar"><div class="m-fill" style="width:${s.pct}%;background:${clr}"></div></div>
+        <div class="week-bars">${barsHtml}</div>
+      </div>`;
+    list.appendChild(c);
+  });
+}
+
+function navWeek(d){wOff+=d;renderWeek();}
+function navMonth(d){mOff+=d;renderMonth();}
+function switchView(v){
+  view=v;
+  document.getElementById('weekView').style.display=v==='week'?'block':'none';
+  document.getElementById('monthView').style.display=v==='month'?'block':'none';
+  document.getElementById('tabW').className='tab'+(v==='week'?' active':'');
+  document.getElementById('tabM').className='tab'+(v==='month'?' active':'');
+  if(v==='month')renderMonth();
+}
+
+function buildModalUI(){
+  const grid=document.getElementById('emojiGrid');grid.innerHTML='';
+  EMOJIS.forEach(e=>{
+    const b=document.createElement('button');b.className='ebtn'+(e===selEmoji?' sel':'');
+    b.textContent=e;b.onclick=()=>{selEmoji=e;document.getElementById('customEmoji').value='';buildModalUI();};
+    grid.appendChild(b);
+  });
+  const cr=document.getElementById('colorRow');cr.innerHTML='';
+  COLORS.forEach(c=>{
+    const b=document.createElement('button');b.className='cdot'+(c===selColor?' sel':'');
+    b.style.background=c;b.onclick=()=>{selColor=c;buildModalUI();};cr.appendChild(b);
+  });
+}
+function openModal(){
+  editId=null;selEmoji='🏃';selColor=COLORS[0];
+  document.getElementById('nameInp').value='';
+  document.getElementById('targetR').value=5;document.getElementById('targetV').textContent=5;
+  document.getElementById('customEmoji').value='';
+  document.getElementById('mTitle').textContent='Nuevo objetivo';
+  document.getElementById('delBtn').style.display='none';
+  buildModalUI();document.getElementById('overlay').classList.add('open');
+  setTimeout(()=>document.getElementById('nameInp').focus(),350);
+}
+function openEdit(id){
+  const g=goals.find(x=>x.id===id);if(!g)return;
+  editId=id;selEmoji=g.icon;selColor=g.color;
+  document.getElementById('nameInp').value=g.name;
+  document.getElementById('targetR').value=g.target;document.getElementById('targetV').textContent=g.target;
+  document.getElementById('customEmoji').value=EMOJIS.includes(g.icon)?'':g.icon;
+  document.getElementById('mTitle').textContent='Editar objetivo';
+  document.getElementById('delBtn').style.display='block';
+  buildModalUI();document.getElementById('overlay').classList.add('open');
+}
+function closeModal(){document.getElementById('overlay').classList.remove('open');}
+function bgClose(e){if(e.target===document.getElementById('overlay'))closeModal();}
+function saveGoal(){
+  const custom=document.getElementById('customEmoji').value.trim();
+  const icon=custom||selEmoji,name=document.getElementById('nameInp').value.trim(),target=parseInt(document.getElementById('targetR').value);
+  if(!name){const i=document.getElementById('nameInp');i.style.borderColor='var(--red)';i.focus();setTimeout(()=>i.style.borderColor='',1500);return;}
+  if(editId){goals=goals.map(g=>g.id===editId?{...g,icon,name,target,color:selColor}:g);}
+  else{goals.push({id:'g'+Date.now(),icon,name,target,color:selColor});}
+  persist();closeModal();renderWeek();if(view==='month')renderMonth();
+}
+function deleteGoal(){
+  if(!editId)return;
+  if(!confirm('¿Eliminar este objetivo? Se pierden todos sus registros.'))return;
+  goals=goals.filter(g=>g.id!==editId);
+  Object.values(completions).forEach(d=>delete d[editId]);
+  persist();closeModal();renderWeek();if(view==='month')renderMonth();
+}
+
+load();
+const n=new Date(),dl=n.toLocaleDateString('es',{weekday:'long',day:'numeric',month:'long'});
+document.getElementById('appDate').textContent=(dl.charAt(0).toUpperCase()+dl.slice(1)).toUpperCase();
+renderWeek();
+
+document.getElementById('customEmoji').addEventListener('input',function(){
+  if(this.value){selEmoji=this.value;document.querySelectorAll('.ebtn').forEach(b=>b.classList.remove('sel'));}
+});
+</script>
+</body>
+</html>
