@@ -41,32 +41,25 @@ main{max-width:520px;margin:0 auto;padding:0 16px}
 .strip-num{font-size:14px;font-weight:600;color:var(--ink2);width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:50%}
 .strip-num.today{background:var(--ink);color:#fff;font-weight:700}
 
-.goal-card{background:var(--surface);border-radius:var(--radius);padding:16px 16px 14px;margin-bottom:10px;border:1px solid var(--border);animation:fadeUp .25s ease both}
+.goal-card{position:relative;border-radius:var(--radius);margin-bottom:10px;overflow:hidden;animation:fadeUp .25s ease both;height:72px;display:flex;align-items:center;cursor:default}
 @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-
-.card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
-.card-left{display:flex;align-items:center;gap:10px;flex:1;min-width:0}
-.card-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0}
-.card-name{font-size:15px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.card-meta{font-size:10px;font-weight:600;color:var(--ink3);margin-top:2px;letter-spacing:.5px;text-transform:uppercase}
-.card-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
-.card-pct{font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:.5px;line-height:1}
-.edit-btn{background:none;border:1.5px solid var(--border);border-radius:8px;color:var(--ink3);cursor:pointer;font-size:13px;width:30px;height:30px;display:flex;align-items:center;justify-content:center;transition:all .15s}
-.edit-btn:hover{border-color:var(--ink);color:var(--ink)}
-
-.day-dots{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:10px}
-.dot-wrap{display:flex;flex-direction:column;align-items:center;gap:4px}
-.dot-lbl{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:.3px;text-transform:uppercase;color:var(--ink3)}
-.dot-lbl.t{color:var(--ink)}
-.dot-btn{width:32px;height:32px;border-radius:50%;border:2px solid var(--border);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;color:transparent;transition:all .16s cubic-bezier(.34,1.4,.64,1);-webkit-tap-highlight-color:transparent}
-.dot-btn:not(.done):not(.future):active{transform:scale(.85)}
-.dot-btn.today-dot{border-width:2.5px}
-.dot-btn.done{border-color:transparent;color:#fff;transform:scale(1.08)}
-.dot-btn.done:active{transform:scale(.95)}
-.dot-btn.future{opacity:.22;cursor:default;pointer-events:none}
-
-.prog-track{height:4px;background:var(--border);border-radius:4px;overflow:hidden}
-.prog-fill{height:100%;border-radius:4px;transition:width .45s cubic-bezier(.4,0,.2,1)}
+.goal-card-bg{position:absolute;inset:0;opacity:.18;transition:width .45s cubic-bezier(.4,0,.2,1)}
+.goal-card-fill{position:absolute;top:0;left:0;bottom:0;transition:width .45s cubic-bezier(.4,0,.2,1),opacity .3s;opacity:.13}
+.goal-card-fill.done{opacity:1}
+.goal-card-inner{position:relative;z-index:1;display:flex;align-items:center;gap:12px;padding:0 14px;width:100%}
+.goal-card-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;background:rgba(255,255,255,.25)}
+.goal-card-text{flex:1;min-width:0}
+.goal-card-name{font-size:15px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--ink)}
+.goal-card-meta{font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--ink2);margin-top:2px}
+.goal-card-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.goal-card-pct{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:.5px;line-height:1;min-width:44px;text-align:right}
+.goal-plus-btn{width:38px;height:38px;border-radius:50%;border:2.5px solid currentColor;background:transparent;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .16s cubic-bezier(.34,1.4,.64,1);-webkit-tap-highlight-color:transparent;flex-shrink:0}
+.goal-plus-btn:active{transform:scale(.88)}
+.goal-plus-btn.done{background:currentColor}
+.goal-plus-btn .plus-icon{font-size:20px;line-height:1;font-weight:300;transition:color .15s}
+.goal-plus-btn.done .plus-icon{color:#fff}
+.goal-edit-btn{background:none;border:1.5px solid var(--border);border-radius:8px;color:var(--ink3);cursor:pointer;font-size:12px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.goal-edit-btn:active{border-color:var(--ink);color:var(--ink)}
 
 .empty{text-align:center;padding:60px 20px}
 .empty-icon{font-size:40px;margin-bottom:14px}
@@ -78,7 +71,7 @@ main{max-width:520px;margin:0 auto;padding:0 16px}
 .m-big{font-family:'Bebas Neue',sans-serif;font-size:88px;letter-spacing:-1px;line-height:1;margin-bottom:8px}
 .m-msg{font-size:13px;font-weight:500;opacity:.65}
 
-.month-card{background:var(--surface);border-radius:var(--radius);padding:16px 18px;margin-bottom:8px;border:1px solid var(--border);display:flex;align-items:center;gap:14px;animation:fadeUp .25s ease both}
+.month-card{background:var(--surface);border-radius:var(--radius);padding:16px 18px;margin-bottom:8px;border:1px solid var(--border);animation:fadeUp .25s ease both}
 .m-circle{flex-shrink:0;position:relative;width:56px;height:56px}
 .m-circle svg{transform:rotate(-90deg)}
 .m-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:.5px}
@@ -89,12 +82,20 @@ main{max-width:520px;margin:0 auto;padding:0 16px}
 .m-bar{height:4px;background:var(--border);border-radius:4px;overflow:hidden}
 .m-fill{height:100%;border-radius:4px;transition:width .55s cubic-bezier(.4,0,.2,1)}
 
-/* ── WEEKLY BARS ── */
-.week-bars{display:flex;align-items:flex-end;gap:3px;height:32px;margin-top:10px;margin-bottom:2px}
-.wbar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px}
-.wbar-track{width:100%;flex:1;background:var(--border);border-radius:3px;overflow:hidden;display:flex;align-items:flex-end}
-.wbar-fill{width:100%;border-radius:3px;transition:height .5s cubic-bezier(.4,0,.2,1)}
-.wbar-lbl{font-family:'Barlow Condensed',sans-serif;font-size:9px;font-weight:700;color:var(--ink3);letter-spacing:.3px}
+/* ── MONTH HISTOGRAM ── */
+.m-histogram{overflow:hidden;max-height:0;transition:max-height .4s cubic-bezier(.4,0,.2,1)}
+.m-histogram.open{max-height:160px}
+.histogram-inner{padding-top:12px}
+.histogram-bars{display:flex;align-items:flex-end;gap:6px;height:80px;margin-bottom:6px}
+.hbar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%}
+.hbar-track{width:100%;flex:1;background:var(--border);border-radius:4px;overflow:hidden;display:flex;align-items:flex-end;position:relative}
+.hbar-fill{width:100%;border-radius:4px;transition:height .5s cubic-bezier(.4,0,.2,1);position:absolute;bottom:0}
+.hbar-val{font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:.3px;color:var(--ink3)}
+.hbar-lbl{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;color:var(--ink3);letter-spacing:.5px;text-transform:uppercase}
+.m-expand-btn{background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:4px;padding:0;margin-top:6px;-webkit-tap-highlight-color:transparent}
+.m-expand-lbl{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--ink3)}
+.m-expand-arrow{font-size:10px;color:var(--ink3);transition:transform .3s}
+.m-expand-arrow.open{transform:rotate(180deg)}
 
 /* ── BEST MONTH ── */
 .best-month-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.12);border-radius:20px;padding:4px 12px;margin-top:10px;font-size:11px;font-weight:600;letter-spacing:.5px;text-transform:uppercase}
@@ -294,7 +295,7 @@ main{max-width:520px;margin:0 auto;padding:0 16px}
         <input class="tinput" id="nameInp" placeholder="ej. Salir a correr" maxlength="30">
       </div>
       <div class="fgrp">
-        <label class="flbl">Días por semana</label>
+        <label class="flbl">Objetivo semanal (veces)</label>
         <div class="range-row">
           <span style="font-size:12px;color:var(--ink3);font-weight:600">1</span>
           <input class="rinput" type="range" id="targetR" min="1" max="7" value="5" oninput="document.getElementById('targetV').textContent=this.value">
@@ -317,13 +318,24 @@ const EMOJIS=['🏃','🏋️','🧘','💧','📚','✍️','🥗','😴','🎸
 const COLORS=['#111111','#18A058','#E63946','#2563EB','#F07020','#9333EA','#0891B2','#DC2626','#CA8A04','#0F766E'];
 const MONTHS=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 const DS=['L','M','X','J','V','S','D'];
-let goals=[],completions={},wOff=0,mOff=0,view='week';
+let goals=[],completions={},wCounts={},wOff=0,mOff=0,view='week';
 let editId=null,selEmoji='🏃',selColor=COLORS[0];
 
-function load(){try{const d=JSON.parse(localStorage.getItem('obj_v4')||'{}');goals=d.goals||[];completions=d.completions||{};}catch(e){}}
-function persist(){localStorage.setItem('obj_v4',JSON.stringify({goals,completions}));}
+function load(){
+  try{
+    const d=JSON.parse(localStorage.getItem('obj_v4')||'{}');
+    goals=d.goals||[];completions=d.completions||{};wCounts=d.wCounts||{};
+  }catch(e){}
+}
+function persist(){localStorage.setItem('obj_v4',JSON.stringify({goals,completions,wCounts}));}
 function today(){return fmt(new Date());}
 function fmt(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
+function weekKey(off){
+  // Monday of the offset week
+  const now=new Date(),dow=(now.getDay()+6)%7,mon=new Date(now);
+  mon.setDate(now.getDate()-dow+off*7);mon.setHours(0,0,0,0);
+  return fmt(mon);
+}
 function weekDates(off){
   const now=new Date(),dow=(now.getDay()+6)%7,mon=new Date(now);
   mon.setDate(now.getDate()-dow+off*7);mon.setHours(0,0,0,0);
@@ -335,6 +347,11 @@ function monthDates(off){
   return Array.from({length:days},(_,i)=>fmt(new Date(t.getFullYear(),t.getMonth(),i+1)));
 }
 function pClr(p){return p>=80?'#18A058':p>=50?'#F07020':'#DC2626';}
+
+function getWeekCount(goalId,off){
+  const k=weekKey(off);
+  return (wCounts[k]&&wCounts[k][goalId])||0;
+}
 
 function renderWeek(){
   const td=today(),dates=weekDates(wOff);
@@ -356,53 +373,52 @@ function renderWeek(){
   document.getElementById('emptyW').style.display=goals.length?'none':'block';
 
   goals.forEach((g,gi)=>{
-    const doneC=dates.filter(d=>completions[d]?.[g.id]).length;
-    const pct=Math.round((doneC/g.target)*100);
-    const card=document.createElement('div');
-    card.className='goal-card';card.style.animationDelay=gi*30+'ms';
-    card.innerHTML=`
-      <div class="card-top">
-        <div class="card-left">
-          <div class="card-icon" style="background:${g.color}18">${g.icon}</div>
-          <div>
-            <div class="card-name">${g.name}</div>
-            <div class="card-meta">${doneC} de ${g.target} días</div>
-          </div>
-        </div>
-        <div class="card-right">
-          <div class="card-pct" style="color:${pClr(pct)}">${pct}%</div>
-          <button class="edit-btn" onclick="openEdit('${g.id}')">✎</button>
-        </div>
-      </div>
-      <div class="day-dots" id="dots-${g.id}"></div>
-      <div class="prog-track"><div class="prog-fill" style="width:${Math.min(pct,100)}%;background:${g.color}"></div></div>`;
-    list.appendChild(card);
+    const count=getWeekCount(g.id,wOff);
+    const pct=Math.round((count/g.target)*100);
+    const fillPct=Math.min(pct,100);
+    const isDone=count>=g.target;
+    const isPast=wOff<0;
 
-    const dotsEl=document.getElementById('dots-'+g.id);
-    dates.forEach((dateStr,di)=>{
-      const done=!!completions[dateStr]?.[g.id],future=dateStr>td,isT=dateStr===td;
-      const wrap=document.createElement('div');wrap.className='dot-wrap';
-      const lbl=document.createElement('span');lbl.className='dot-lbl'+(isT?' t':'');lbl.textContent=DS[di];
-      const btn=document.createElement('button');
-      btn.className=`dot-btn${done?' done':''}${future?' future':''}${isT?' today-dot':''}`;
-      btn.style.background=done?g.color:'';
-      btn.style.borderColor=done?g.color:(isT?g.color:'');
-      btn.innerHTML=done?'✓':'';
-      if(!future)btn.onclick=()=>toggle(dateStr,g.id);
-      wrap.appendChild(lbl);wrap.appendChild(btn);dotsEl.appendChild(wrap);
-    });
+    const card=document.createElement('div');
+    card.className='goal-card';
+    card.style.animationDelay=gi*30+'ms';
+    card.style.background=`${g.color}14`;
+    card.style.border=`1px solid ${g.color}30`;
+
+    card.innerHTML=`
+      <div class="goal-card-fill${isDone?' done':''}" style="width:${fillPct}%;background:${g.color}"></div>
+      <div class="goal-card-inner">
+        <div class="goal-card-icon">${g.icon}</div>
+        <div class="goal-card-text">
+          <div class="goal-card-name" style="color:${isDone?'#fff':''}">${g.name}</div>
+          <div class="goal-card-meta" style="color:${isDone?'rgba(255,255,255,.7)':''}">${count} / ${g.target} esta semana</div>
+        </div>
+        <div class="goal-card-right">
+          <div class="goal-card-pct" style="color:${isDone?'#fff':g.color}">${pct}%</div>
+          <button class="goal-edit-btn" style="${isDone?'border-color:rgba(255,255,255,.3);color:rgba(255,255,255,.7)':''}" onclick="openEdit('${g.id}')">✎</button>
+          <button class="goal-plus-btn" style="
+            color:${isDone?'#fff':g.color};
+            background:${isDone?'rgba(255,255,255,.25)':g.color+'28'};
+            border-color:${isDone?'rgba(255,255,255,.5)':g.color+'60'};
+          " onclick="increment('${g.id}')" ${isPast?'disabled':''}>
+            <span class="plus-icon" style="color:${isDone?'#fff':g.color}">+</span>
+          </button>
+        </div>
+      </div>`;
+    list.appendChild(card);
   });
 }
 
-function toggle(dateStr,goalId){
-  if(!completions[dateStr])completions[dateStr]={};
-  const nowDone=!completions[dateStr][goalId];
-  completions[dateStr][goalId]=nowDone;
-  if(nowDone&&navigator.vibrate)navigator.vibrate(30);
+function increment(goalId){
+  const k=weekKey(wOff);
+  if(!wCounts[k])wCounts[k]={};
+  wCounts[k][goalId]=(wCounts[k][goalId]||0)+1;
+  if(navigator.vibrate)navigator.vibrate(30);
   persist();renderWeek();
-  // Check if ALL goals done today
-  if(nowDone&&dateStr===today()){
-    const allDone=goals.length>0&&goals.every(g=>completions[dateStr]?.[g.id]);
+  // celebration when hitting target exactly
+  const g=goals.find(x=>x.id===goalId);
+  if(g&&wCounts[k][goalId]===g.target){
+    const allDone=goals.every(g2=>(wCounts[k][g2.id]||0)>=g2.target);
     if(allDone)showCelebration();
   }
 }
@@ -413,21 +429,37 @@ function showCelebration(){
   setTimeout(()=>el.classList.remove('show'),2200);
 }
 
+function getMonthWeekKeys(off){
+  // Returns the Monday keys of all weeks that overlap with the given month offset
+  const now=new Date(),t=new Date(now.getFullYear(),now.getMonth()+off,1);
+  const y=t.getFullYear(),m=t.getMonth();
+  const keys=[];
+  // iterate all wCounts keys and check which month they belong to
+  Object.keys(wCounts).forEach(k=>{
+    const d=new Date(k);
+    // a week "belongs" to a month if its Monday is in that month or overlaps
+    if(d.getFullYear()===y&&d.getMonth()===m)keys.push(k);
+  });
+  return keys;
+}
+
+function getMonthCount(goalId,off){
+  const keys=getMonthWeekKeys(off);
+  return keys.reduce((sum,k)=>(sum+(wCounts[k]?.[goalId]||0)),0);
+}
+
 function getBestMonth(){
-  // Find the month key with highest avg pct across all completions
   const monthMap={};
-  Object.keys(completions).forEach(dateStr=>{
-    const mk=dateStr.slice(0,7);
+  Object.keys(wCounts).forEach(k=>{
+    const mk=k.slice(0,7);
     if(!monthMap[mk])monthMap[mk]=[];
-    monthMap[mk].push(dateStr);
+    monthMap[mk].push(k);
   });
   let bestMk=null,bestAvg=0;
-  Object.entries(monthMap).forEach(([mk,dates])=>{
+  Object.entries(monthMap).forEach(([mk,keys])=>{
     if(!goals.length)return;
-    const [y,m]=mk.split('-').map(Number);
-    const tgt=goals[0].target*4; // use first goal as proxy, or avg
     const avgs=goals.map(g=>{
-      const done=dates.filter(d=>completions[d]?.[g.id]).length;
+      const done=keys.reduce((s,k)=>s+(wCounts[k]?.[g.id]||0),0);
       return Math.round((done/(g.target*4))*100);
     });
     const avg=Math.round(avgs.reduce((a,b)=>a+b,0)/avgs.length);
@@ -437,32 +469,34 @@ function getBestMonth(){
 }
 
 function getWeeklyBars(goalId,off){
-  // 4 weeks of the month
   const now=new Date(),t=new Date(now.getFullYear(),now.getMonth()+off,1);
   const y=t.getFullYear(),m=t.getMonth();
   return Array.from({length:4},(_,wi)=>{
-    const weekDays=Array.from({length:7},(__,di)=>{
-      const d=new Date(y,m,wi*7+di+1);
-      return d.getMonth()===m?fmt(d):null;
-    }).filter(Boolean);
-    const done=weekDays.filter(d=>completions[d]?.[goalId]).length;
-    return{done,total:weekDays.length,pct:weekDays.length?Math.round((done/weekDays.length)*100):0};
+    // Monday of week wi in this month
+    const mon=new Date(y,m,wi*7+1);
+    // find nearest Monday
+    const dow=(mon.getDay()+6)%7;
+    mon.setDate(mon.getDate()-dow);
+    const k=fmt(mon);
+    const g=goals.find(x=>x.id===goalId);
+    const done=(wCounts[k]&&wCounts[k][goalId])||0;
+    const tgt=g?g.target:1;
+    return{done,tgt,pct:Math.round((done/tgt)*100)};
   });
 }
 
 function renderMonth(){
   const now=new Date(),t=new Date(now.getFullYear(),now.getMonth()+mOff,1);
   document.getElementById('monthLbl').textContent=`${MONTHS[t.getMonth()]} ${t.getFullYear()}`;
-  const md=monthDates(mOff);
   const stats=goals.map(g=>{
-    const done=md.filter(d=>completions[d]?.[g.id]).length;
+    const done=getMonthCount(g.id,mOff);
     const tgt=g.target*4;
     const pct=Math.round((done/tgt)*100);
     return{...g,done,tgt,pct};
   });
   const avg=stats.length?Math.round(stats.reduce((a,b)=>a+b.pct,0)/stats.length):0;
   const msg=avg>=80?'Excelente mes. Seguí así.':avg>=50?'Buen progreso, podés dar más.':'Mes difícil. El próximo va a ser mejor.';
-  
+
   const best=getBestMonth();
   const currentMk=`${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,'0')}`;
   const isBest=best&&best.mk===currentMk&&best.avg>0;
@@ -475,27 +509,46 @@ function renderMonth(){
   stats.forEach((s,i)=>{
     const clr=pClr(s.pct),r=22,circ=2*Math.PI*r,dash=(Math.min(s.pct,100)/100)*circ;
     const weekBars=getWeeklyBars(s.id,mOff);
-    const barsHtml=weekBars.map((w,wi)=>`
-      <div class="wbar-wrap">
-        <div class="wbar-track" style="height:28px">
-          <div class="wbar-fill" style="height:${w.pct}%;background:${clr};opacity:.75"></div>
-        </div>
-        <span class="wbar-lbl">S${wi+1}</span>
-      </div>`).join('');
+    const maxVal=Math.max(...weekBars.map(w=>w.done),s.tgt/4,1);
+
+    const barsHtml=weekBars.map((w,wi)=>{
+      const heightPct=Math.round((w.done/maxVal)*100);
+      const barClr=w.done>=s.tgt/4?clr:clr+'80';
+      return `
+        <div class="hbar-col" style="${w.done===0?'opacity:0;pointer-events:none':''}">
+          <div class="hbar-val">${w.done>0?w.done:''}</div>
+          <div class="hbar-track">
+            <div class="hbar-fill" style="height:${heightPct}%;background:${barClr}"></div>
+          </div>
+          <div class="hbar-lbl">S${wi+1}</div>
+        </div>`;
+    }).join('');
+
     const c=document.createElement('div');c.className='month-card';c.style.animationDelay=i*35+'ms';
+    const hid=`hist-${s.id}`,aid=`harr-${s.id}`;
     c.innerHTML=`
-      <div class="m-circle">
-        <svg width="56" height="56" viewBox="0 0 56 56">
-          <circle cx="28" cy="28" r="${r}" fill="none" stroke="#F0F0F0" stroke-width="5"/>
-          <circle cx="28" cy="28" r="${r}" fill="none" stroke="${clr}" stroke-width="5" stroke-dasharray="${dash} ${circ}" stroke-linecap="round"/>
-        </svg>
-        <div class="m-num" style="color:${clr}">${s.pct}%</div>
+      <div style="display:flex;align-items:center;gap:14px">
+        <div class="m-circle" style="flex-shrink:0">
+          <svg width="56" height="56" viewBox="0 0 56 56">
+            <circle cx="28" cy="28" r="${r}" fill="none" stroke="#F0F0F0" stroke-width="5"/>
+            <circle cx="28" cy="28" r="${r}" fill="none" stroke="${clr}" stroke-width="5" stroke-dasharray="${dash} ${circ}" stroke-linecap="round"/>
+          </svg>
+          <div class="m-num" style="color:${clr}">${s.pct}%</div>
+        </div>
+        <div class="m-body" style="flex:1;min-width:0">
+          <div class="m-name-row"><span style="font-size:18px">${s.icon}</span><span class="m-name">${s.name}</span></div>
+          <div class="m-sub">${s.done} de ${s.tgt} veces objetivo</div>
+          <div class="m-bar"><div class="m-fill" style="width:${Math.min(s.pct,100)}%;background:${clr}"></div></div>
+          <button class="m-expand-btn" onclick="toggleHistogram('${hid}','${aid}')">
+            <span class="m-expand-lbl">Semanas</span>
+            <span class="m-expand-arrow" id="${aid}">▾</span>
+          </button>
+        </div>
       </div>
-      <div class="m-body">
-        <div class="m-name-row"><span style="font-size:18px">${s.icon}</span><span class="m-name">${s.name}</span></div>
-        <div class="m-sub">${s.done} de ${s.tgt} días objetivo</div>
-        <div class="m-bar"><div class="m-fill" style="width:${Math.min(s.pct,100)}%;background:${clr}"></div></div>
-        <div class="week-bars">${barsHtml}</div>
+      <div class="m-histogram" id="${hid}">
+        <div class="histogram-inner">
+          <div class="histogram-bars">${barsHtml}</div>
+        </div>
       </div>`;
     list.appendChild(c);
   });
@@ -503,6 +556,12 @@ function renderMonth(){
 
 function navWeek(d){wOff+=d;renderWeek();}
 function navMonth(d){mOff+=d;renderMonth();}
+function toggleHistogram(hid,aid){
+  const h=document.getElementById(hid),a=document.getElementById(aid);
+  if(!h||!a)return;
+  h.classList.toggle('open');
+  a.classList.toggle('open');
+}
 function switchView(v){
   view=v;
   document.getElementById('weekView').style.display=v==='week'?'block':'none';
@@ -548,6 +607,7 @@ function openEdit(id){
   document.getElementById('customEmoji').value=EMOJIS.includes(g.icon)?'':g.icon;
   document.getElementById('mTitle').textContent='Editar objetivo';
   document.getElementById('delBtn').style.display='block';
+  document.getElementById('delBtn').dataset.id=id;
   buildModalUI();document.getElementById('overlay').classList.add('open');
 }
 function closeModal(){document.getElementById('overlay').classList.remove('open');}
@@ -561,11 +621,19 @@ function saveGoal(){
   persist();closeModal();renderWeek();if(view==='month')renderMonth();
 }
 function deleteGoal(){
-  if(!editId)return;
-  if(!confirm('¿Eliminar este objetivo? Se pierden todos sus registros.'))return;
-  goals=goals.filter(g=>g.id!==editId);
-  Object.values(completions).forEach(d=>delete d[editId]);
-  persist();closeModal();renderWeek();if(view==='month')renderMonth();
+  const btn=document.getElementById('delBtn');
+  const id=btn.dataset.id;
+  if(!id)return;
+  if(btn.dataset.confirming==='1'){
+    goals=goals.filter(g=>g.id!==id);
+    Object.values(wCounts).forEach(w=>delete w[id]);
+    persist();closeModal();renderWeek();if(view==='month')renderMonth();
+    btn.dataset.confirming='';btn.textContent='Eliminar';
+  } else {
+    btn.dataset.confirming='1';
+    btn.textContent='⚠️ Tapeá de nuevo para confirmar';
+    setTimeout(()=>{btn.dataset.confirming='';btn.textContent='Eliminar';},3000);
+  }
 }
 
 load();
