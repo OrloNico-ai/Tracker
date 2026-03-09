@@ -148,7 +148,8 @@ main{max-width:520px;margin:0 auto;padding:0 16px}
 .rutina-card-header{display:flex;align-items:center;gap:12px;padding:16px 16px 14px;cursor:pointer;-webkit-tap-highlight-color:transparent;user-select:none}
 .rutina-color-strip{width:4px;border-radius:4px;flex-shrink:0;align-self:stretch;min-height:36px}
 .rutina-card-body{flex:1;min-width:0}
-.rutina-card-name{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:.5px;line-height:1}
+.rutina-card-name{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:.5px;line-height:1;text-decoration:none;cursor:pointer}
+.rutina-card-name:active{opacity:.7}
 .rutina-card-meta{display:flex;gap:6px;margin-top:4px;flex-wrap:wrap}
 .rutina-meta-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 .rutina-card-count{font-size:10px;font-weight:700;color:var(--ink3);letter-spacing:.8px;text-transform:uppercase;margin-top:3px}
@@ -170,6 +171,33 @@ main{max-width:520px;margin:0 auto;padding:0 16px}
 .rutina-empty-icon{font-size:40px;margin-bottom:14px}
 .rutina-empty-title{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:1px;color:var(--ink2);margin-bottom:6px}
 .rutina-empty-sub{font-size:13px;color:var(--ink3);font-weight:500}
+
+/* ── RUTINA DETAIL ── */
+.rdetail-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:150;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity .25s}
+.rdetail-overlay.open{opacity:1;pointer-events:all}
+.rdetail-sheet{background:var(--bg);border-radius:22px 22px 0 0;width:100%;max-width:520px;margin:0 auto;flex:1;margin-top:60px;overflow:hidden;transform:translateY(100%);transition:transform .32s cubic-bezier(.32,.72,0,1);display:flex;flex-direction:column}
+.rdetail-overlay.open .rdetail-sheet{transform:translateY(0)}
+.rdetail-top{background:var(--ink);color:#fff;padding:28px 20px 22px;border-radius:22px 22px 0 0;flex-shrink:0}
+.rdetail-close{position:absolute;top:16px;right:16px;background:rgba(255,255,255,.15);border:none;color:#fff;border-radius:50%;width:32px;height:32px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1}
+.rdetail-close:active{background:rgba(255,255,255,.3)}
+.rdetail-name{font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:1px;line-height:1;margin-bottom:4px}
+.rdetail-subtitle{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;opacity:.5}
+.rdetail-body{padding:16px 16px 48px;flex:1;overflow-y:auto}
+
+.rdetail-ex-block{margin-bottom:8px}
+.rdetail-ex-row{display:flex;align-items:center;gap:12px;background:var(--surface);border-radius:12px;padding:13px 14px;border:1px solid var(--border)}
+.rdetail-ex-pill{height:28px;padding:0 10px;border-radius:6px;display:flex;align-items:center;flex-shrink:0}
+.rdetail-ex-num{font-family:'Bebas Neue',sans-serif;font-size:13px;color:#fff;letter-spacing:.5px}
+.rdetail-ex-name{font-size:14px;font-weight:700;flex:1}
+.rdetail-ex-sets{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;color:var(--ink3);letter-spacing:.5px}
+
+.rdetail-weeks{margin-top:6px;display:flex;flex-direction:column;gap:6px}
+.rdetail-week-row{background:var(--surface);border-radius:12px;padding:12px 14px;border:1px solid var(--border)}
+.rdetail-week-label{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink3);margin-bottom:8px}
+.rdetail-slots{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.rdetail-slot{width:100%;padding:9px 8px;border:2px solid var(--border);border-radius:10px;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:.5px;text-align:center;background:var(--bg);color:var(--ink);outline:none;transition:border-color .15s}
+.rdetail-slot:focus{border-color:var(--ink);background:#fff}
+.rdetail-slot::placeholder{color:var(--ink3);font-weight:400;font-size:12px}
 
 /* modal rutina */
 .ex-color-pick{display:flex;gap:8px;margin-bottom:12px}
@@ -329,7 +357,7 @@ function renderWeek(){
 
   goals.forEach((g,gi)=>{
     const doneC=dates.filter(d=>completions[d]?.[g.id]).length;
-    const pct=Math.round(Math.min((doneC/g.target)*100,100));
+    const pct=Math.round((doneC/g.target)*100);
     const card=document.createElement('div');
     card.className='goal-card';card.style.animationDelay=gi*30+'ms';
     card.innerHTML=`
@@ -347,7 +375,7 @@ function renderWeek(){
         </div>
       </div>
       <div class="day-dots" id="dots-${g.id}"></div>
-      <div class="prog-track"><div class="prog-fill" style="width:${pct}%;background:${g.color}"></div></div>`;
+      <div class="prog-track"><div class="prog-fill" style="width:${Math.min(pct,100)}%;background:${g.color}"></div></div>`;
     list.appendChild(card);
 
     const dotsEl=document.getElementById('dots-'+g.id);
@@ -400,7 +428,7 @@ function getBestMonth(){
     const tgt=goals[0].target*4; // use first goal as proxy, or avg
     const avgs=goals.map(g=>{
       const done=dates.filter(d=>completions[d]?.[g.id]).length;
-      return Math.round(Math.min((done/(g.target*4))*100,100));
+      return Math.round((done/(g.target*4))*100);
     });
     const avg=Math.round(avgs.reduce((a,b)=>a+b,0)/avgs.length);
     if(avg>bestAvg){bestAvg=avg;bestMk=mk;}
@@ -429,7 +457,7 @@ function renderMonth(){
   const stats=goals.map(g=>{
     const done=md.filter(d=>completions[d]?.[g.id]).length;
     const tgt=g.target*4;
-    const pct=Math.round(Math.min((done/tgt)*100,100));
+    const pct=Math.round((done/tgt)*100);
     return{...g,done,tgt,pct};
   });
   const avg=stats.length?Math.round(stats.reduce((a,b)=>a+b.pct,0)/stats.length):0;
@@ -445,7 +473,7 @@ function renderMonth(){
   const list=document.getElementById('monthList');list.innerHTML='';
   if(!stats.length){list.innerHTML='<div class="empty"><div class="empty-icon">🎯</div><div class="empty-title">Sin objetivos</div></div>';return;}
   stats.forEach((s,i)=>{
-    const clr=pClr(s.pct),r=22,circ=2*Math.PI*r,dash=(s.pct/100)*circ;
+    const clr=pClr(s.pct),r=22,circ=2*Math.PI*r,dash=(Math.min(s.pct,100)/100)*circ;
     const weekBars=getWeeklyBars(s.id,mOff);
     const barsHtml=weekBars.map((w,wi)=>`
       <div class="wbar-wrap">
@@ -466,7 +494,7 @@ function renderMonth(){
       <div class="m-body">
         <div class="m-name-row"><span style="font-size:18px">${s.icon}</span><span class="m-name">${s.name}</span></div>
         <div class="m-sub">${s.done} de ${s.tgt} días objetivo</div>
-        <div class="m-bar"><div class="m-fill" style="width:${s.pct}%;background:${clr}"></div></div>
+        <div class="m-bar"><div class="m-fill" style="width:${Math.min(s.pct,100)}%;background:${clr}"></div></div>
         <div class="week-bars">${barsHtml}</div>
       </div>`;
     list.appendChild(c);
@@ -581,7 +609,7 @@ function renderRutina(){
       <div class="rutina-card-header" onclick="toggleRutina('rc-${r.id}','ch-${r.id}')">
         <div class="rutina-color-strip" style="background:${topColor}"></div>
         <div class="rutina-card-body">
-          <div class="rutina-card-name">${r.name}</div>
+          <div class="rutina-card-name" onclick="event.stopPropagation();openRutinaDetail('${r.id}')">${r.name}</div>
           <div style="display:flex;align-items:center;gap:6px;margin-top:5px">
             ${dotsHtml}
             <span class="rutina-card-count">${r.exercises.length} ejercicio${r.exercises.length!==1?'s':''}</span>
@@ -717,6 +745,68 @@ function deleteRutina(){
   persistRutinas();closeRutinaModal();renderRutina();
 }
 
+// ── RUTINA DETAIL ─────────────────────────────────────────────────────────
+function loadRutinaLogs(){try{return JSON.parse(localStorage.getItem('rlogs_v1')||'{}')}catch(e){return{}}}
+function saveRutinaLog(key,val){const d=loadRutinaLogs();d[key]=val;localStorage.setItem('rlogs_v1',JSON.stringify(d));}
+
+function openRutinaDetail(id){
+  loadRutinas();
+  const r=rutinas.find(x=>x.id===id);if(!r)return;
+  const logs=loadRutinaLogs();
+  const sheet=document.getElementById('rdetailSheet');
+
+  // header
+  document.getElementById('rdetailName').textContent=r.name;
+  document.getElementById('rdetailSub').textContent=`${r.exercises.length} ejercicio${r.exercises.length!==1?'s':''}`;
+
+  // body
+  const body=document.getElementById('rdetailBody');
+  body.innerHTML='';
+  const seenColors=new Set();
+
+  r.exercises.forEach((ex,i)=>{
+    const isFirstOfColor=!seenColors.has(ex.color);
+    if(isFirstOfColor)seenColors.add(ex.color);
+
+    const block=document.createElement('div');
+    block.className='rdetail-ex-block';
+
+    // exercise row
+    block.innerHTML=`
+      <div class="rdetail-ex-row">
+        <div class="rdetail-ex-pill" style="background:${ex.color}">
+          <span class="rdetail-ex-num">${String(i+1).padStart(2,'0')}</span>
+        </div>
+        <span class="rdetail-ex-name">${ex.name}</span>
+        ${ex.detail?`<span class="rdetail-ex-sets">${ex.detail}</span>`:''}
+      </div>`;
+
+    // week slots only for first of each color
+    if(isFirstOfColor){
+      const weeks=document.createElement('div');
+      weeks.className='rdetail-weeks';
+      [1,2,3,4].forEach(w=>{
+        const wrow=document.createElement('div');
+        wrow.className='rdetail-week-row';
+        const slots=[0,1,2].map(s=>{
+          const key=`${id}_${ex.id}_w${w}_s${s}`;
+          const val=logs[key]||'';
+          return `<input class="rdetail-slot" placeholder="—" maxlength="12" value="${val}" oninput="saveRutinaLog('${key}',this.value)">`;
+        }).join('');
+        wrow.innerHTML=`<div class="rdetail-week-label">Semana ${w}</div><div class="rdetail-slots">${slots}</div>`;
+        weeks.appendChild(wrow);
+      });
+      block.appendChild(weeks);
+    }
+
+    body.appendChild(block);
+  });
+
+  document.getElementById('rdetailOverlay').classList.add('open');
+}
+
+function closeRutinaDetail(){document.getElementById('rdetailOverlay').classList.remove('open');}
+
 function deleteRutinaById(){
   const btn=document.getElementById('delRutinaBtn');
   const id=btn.dataset.id;
@@ -769,5 +859,17 @@ function deleteRutinaById(){
 document.getElementById('exNameInp').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();addExercise();}});
 document.getElementById('exDetailInp').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();addExercise();}});
 </script>
+
+<!-- RUTINA DETAIL OVERLAY -->
+<div class="rdetail-overlay" id="rdetailOverlay" onclick="if(event.target===this)closeRutinaDetail()">
+  <div class="rdetail-sheet" id="rdetailSheet">
+    <div class="rdetail-top" style="position:relative">
+      <button class="rdetail-close" onclick="closeRutinaDetail()">✕</button>
+      <div class="rdetail-name" id="rdetailName">—</div>
+      <div class="rdetail-subtitle" id="rdetailSub">—</div>
+    </div>
+    <div class="rdetail-body" id="rdetailBody"></div>
+  </div>
+</div>
 </body>
 </html>
